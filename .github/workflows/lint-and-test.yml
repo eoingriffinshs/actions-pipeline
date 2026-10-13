@@ -1,0 +1,42 @@
+name: Lint and Test
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_ENV: test
+
+jobs:
+    lint:
+      name: Lint Check
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v6
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v6
+          with:
+            node-version: 20
+
+        - name: Run lint check
+          run: npm run lint
+    test:
+      name: Run Tests
+      needs: lint
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
