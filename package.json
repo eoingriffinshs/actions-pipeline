@@ -1,0 +1,10 @@
+{
+  "name": "actions-pipeline",
+  "version": "1.0.0",
+  "description": "A project for learning GitHub Actions workflow YAML syntax",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test.js",
+    "lint": "node lint-check.js"
+  }
+}
