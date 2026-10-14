@@ -17,6 +17,10 @@ on:
         required: true
         type: boolean
         default: true
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+  
 jobs:
   deploy:
     name: Deploy to ${{ inputs.environment }}
@@ -31,7 +35,7 @@ jobs:
           echo "Dry run: ${{ inputs.dry_run }}"
           echo "Triggered by: ${{ github.actor }}"
           echo "Commit SHA: ${{ github.sha }}"
-          
+
       - name: Run deployment
         if: ${{ inputs.dry_run == false }}
         env:
