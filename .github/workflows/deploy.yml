@@ -1,0 +1,42 @@
+name: Deploy
+
+run-name: Deploy to ${{ inputs.environment }} by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      dry_run:
+        description: 'Perform a dry run (no actual deploy)'
+        required: true
+        type: boolean
+        default: true
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Print deploy configuration
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Dry run: ${{ inputs.dry_run }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          
+      - name: Run deployment
+        if: ${{ inputs.dry_run == false }}
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          echo "Deploying to ${{ inputs.environment }}..."
+          echo "Using deploy token: [REDACTED]"
+          echo "Deployment to ${{ inputs.environment }} complete!"
